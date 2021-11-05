@@ -1,6 +1,6 @@
 import time
 
-from breath.api_interface.request import Request, Response
+from .request import Request, Response
 
 from .queue import Queue
 

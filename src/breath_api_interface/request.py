@@ -1,4 +1,4 @@
-from breath.api_interface.queue import Queue
+from .queue import Queue
 
 
 class Response:
