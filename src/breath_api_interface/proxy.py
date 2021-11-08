@@ -43,6 +43,8 @@ class ServiceProxy:
         
         while self.manager_queue.full():
             continue
+
+        
         
         self.manager_queue.insert(request)
 

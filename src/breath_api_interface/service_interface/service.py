@@ -20,6 +20,9 @@ class Service(ABC):
         self._proxy = proxy
         self._request_queue = request_queue
 
+    def start(self):
+        pass
+
     @property
     def request_queue(self) -> Queue:
         '''Get the queue for sending requests.
@@ -35,11 +38,12 @@ class Service(ABC):
             return None
     
     def run_forever(self):
+        self.start()
         while(True):
-            self._run()
+            self.run()
 
     @abstractmethod
-    def _run(self):
+    def run(self):
         '''Run the service.
         '''
         ...

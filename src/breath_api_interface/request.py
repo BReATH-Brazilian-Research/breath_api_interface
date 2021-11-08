@@ -1,4 +1,4 @@
-from .queue import Queue
+from .queue import ProcessQueue, Queue
 
 
 class Response:
@@ -10,7 +10,7 @@ class Request:
     '''Stores some request info.
     '''
 
-    def __init__(self, service_name:str, operation_name:str, request_info:dict, response_queue:Queue):
+    def __init__(self, service_name:str, operation_name:str, request_info:dict=None, response_queue:Queue=None):
         '''Request constructor
 
             :param service_name: Name of requested service
