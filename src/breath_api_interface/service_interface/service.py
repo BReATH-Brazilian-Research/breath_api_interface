@@ -2,13 +2,14 @@ from abc import ABC, abstractmethod
 from typing import Union
 
 from breath_api_interface import ServiceProxy, Queue, Request
+from breath_api_interface.request import Response
 
 
 class Service(ABC):
     '''BReATH service base class.
     '''
 
-    def __init__(self, proxy:ServiceProxy, request_queue:Queue):
+    def __init__(self, proxy:ServiceProxy, request_queue:Queue, global_response_queue:Queue, service_name:str):
         '''Service constructor.
 
             :param proxy: Proxy for sending requests
@@ -17,11 +18,10 @@ class Service(ABC):
             :param request_queue: Queue for getting requests
             :type request_queue: Queue
         '''
-        self._proxy = proxy
+        self.__proxy = proxy
         self._request_queue = request_queue
-
-    def start(self):
-        pass
+        self._global_response_queue = global_response_queue
+        self._service_name = service_name
 
     @property
     def request_queue(self) -> Queue:
@@ -36,9 +36,15 @@ class Service(ABC):
             return self._request_queue.pop()
         else:
             return None
+
+    def _send_request(self, service_name, operation_name, request_info=None) -> None:
+        request = Request(service_name, operation_name, self._service_name, request_info)
+        return self.__proxy.send_request(request)
+
+    def _send_response(self, response:Response) -> None:
+        self._global_response_queue.insert(response)
     
     def run_forever(self):
-        self.start()
         while(True):
             self.run()
 

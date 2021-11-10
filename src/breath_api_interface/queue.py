@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from collections import deque
 import multiprocessing
+from multiprocessing import Queue as MQueue
 
 class Queue(ABC):
     '''!
@@ -115,15 +116,12 @@ class ProcessQueue(Queue):
         Uses multiprocessing.queue for implement the queue
     '''
 
-    _manager = None
 
     def __init__(self, max_size=100):
         super().__init__(max_size)
         
-        if ProcessQueue._manager is None:
-            ProcessQueue._manager = multiprocessing.Manager()
         
-        self.queue = ProcessQueue._manager.Queue(maxsize=max_size)
+        self.queue = MQueue(maxsize=max_size)
 
 
     def get(self):

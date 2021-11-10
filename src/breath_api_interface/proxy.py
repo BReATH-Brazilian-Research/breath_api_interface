@@ -37,14 +37,9 @@ class ServiceProxy:
 
             :return: Request response
             :rtype: Response
-        '''
-
-        request.responseQueue = self.response_queue
-        
+        '''        
         while self.manager_queue.full():
             continue
-
-        
         
         self.manager_queue.insert(request)
 

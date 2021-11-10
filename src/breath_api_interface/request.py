@@ -1,16 +1,18 @@
+from typing import Dict
 from .queue import ProcessQueue, Queue
 
 
 class Response:
-    def __init__(self, sucess:bool, response_data:dict=None):
+    def __init__(self, sucess:bool, requester_service_name:str, response_data:dict=None):
         self.sucess = sucess
         self.response_data = response_data
+        self.requester_service_name = requester_service_name
 
 class Request:
     '''Stores some request info.
     '''
 
-    def __init__(self, service_name:str, operation_name:str, request_info:dict=None, response_queue:Queue=None):
+    def __init__(self, service_name:str, operation_name:str, response_service_name:str, request_info:dict=None):
         '''Request constructor
 
             :param service_name: Name of requested service
@@ -29,13 +31,7 @@ class Request:
         self.service_name = service_name
         self.operation_name = operation_name
         self.request_info = request_info
-        self.response_queue = response_queue
+        self.response_service_name = response_service_name
 
-    def send_response(self, response:Response) -> None:
-        '''Send response for the request
-            
-            :param response: Response data
-            :type response: breath.api_interface.Response
-        '''
-
-        self.response_queue.insert(response)
+    def create_response(self, sucess:bool, response_data:dict=None) -> Response:
+        return Response(sucess, self.response_service_name, response_data)
