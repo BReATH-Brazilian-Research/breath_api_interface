@@ -37,7 +37,7 @@ class Service(ABC):
         else:
             return None
 
-    def _send_request(self, service_name, operation_name, request_info=None, wait_for_response=True) -> None:
+    def _send_request(self, service_name, operation_name, request_info=None, wait_for_response=True) -> Union[Response, None]:
         request = Request(service_name, operation_name, self._service_name, request_info, wait_for_response)
         return self.__proxy.send_request(request)
 
