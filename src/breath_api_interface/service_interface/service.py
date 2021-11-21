@@ -37,12 +37,13 @@ class Service(ABC):
         else:
             return None
 
-    def _send_request(self, service_name, operation_name, request_info=None) -> None:
-        request = Request(service_name, operation_name, self._service_name, request_info)
+    def _send_request(self, service_name, operation_name, request_info=None, wait_for_response=True) -> None:
+        request = Request(service_name, operation_name, self._service_name, request_info, wait_for_response)
         return self.__proxy.send_request(request)
 
     def _send_response(self, response:Response) -> None:
-        self._global_response_queue.insert(response)
+        if response.wait_for_response == True:
+            self._global_response_queue.insert(response)
     
     def run_forever(self):
         while(True):

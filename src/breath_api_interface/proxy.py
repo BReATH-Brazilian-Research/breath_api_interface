@@ -1,4 +1,5 @@
 import time
+from typing import Union
 
 from .request import Request, Response
 
@@ -26,7 +27,7 @@ class ServiceProxy:
         self.manager_queue = manager_queue
         self.response_queue = response_queue
 
-    def send_request(self, request: Request) -> Response:
+    def send_request(self, request: Request) -> Union[Response, None]:
         '''
             Send some service request.
 
@@ -35,13 +36,16 @@ class ServiceProxy:
             :param request: Request to be send.
             :type request: breath.api_interface.Request
 
-            :return: Request response
-            :rtype: Response
+            :return: Request response or None if request "wait_for_response" is false.
+            :rtype: Response|None
         '''        
         while self.manager_queue.full():
             continue
         
         self.manager_queue.insert(request)
+
+        if not request.wait_for_response:
+            return None
 
         while self.response_queue.empty():
             time.sleep(1E-3)
