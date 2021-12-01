@@ -1,4 +1,19 @@
-image: python:latest # pega imagem de docker do python
+image: python:3.8 # pega imagem de docker do python
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+before_script:
+  - python -V  # Print out python version for debugging
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+
 
 stages:
   - build
