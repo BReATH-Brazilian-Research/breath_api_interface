@@ -17,7 +17,6 @@ before_script:
 
 stages:
   - build
-  - complete
 
 build_main:
   stage: build
@@ -29,8 +28,3 @@ build_main:
   artifacts: # documentos e arquivos que serao gerados
     paths:
       - public
-
-complete:
-  stage: complete
-  script:
-    - echo 'build do breath_api_interface completo'
